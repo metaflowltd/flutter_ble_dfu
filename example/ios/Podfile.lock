@@ -1,0 +1,33 @@
+PODS:
+  - ble_dfu (0.0.1):
+    - Flutter
+    - iOSDFULibrary
+  - Flutter (1.0.0)
+  - iOSDFULibrary (4.1.3):
+    - Zip (~> 1.0)
+  - Zip (1.1.0)
+
+DEPENDENCIES:
+  - ble_dfu (from `Pods/.symlinks/plugins/ble_dfu/ios`)
+  - Flutter (from `Pods/.symlinks/flutter/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - iOSDFULibrary
+    - Zip
+
+EXTERNAL SOURCES:
+  ble_dfu:
+    :path: Pods/.symlinks/plugins/ble_dfu/ios
+  Flutter:
+    :path: Pods/.symlinks/flutter/ios
+
+SPEC CHECKSUMS:
+  ble_dfu: e1af5ef58ea32199e3a41be27a792fffd4e26c55
+  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  iOSDFULibrary: 921bc0e250ad204a68ffe0cc98a7cb6ac8b13b9f
+  Zip: 8877eede3dda76bcac281225c20e71c25270774c
+
+PODFILE CHECKSUM: ea0518673586564c605fb6593d385c0e3708ff8d
+
+COCOAPODS: 1.5.2

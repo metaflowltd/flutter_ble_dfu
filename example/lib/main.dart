@@ -10,8 +10,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  String _foundDeviceName = 'Unknown';
+  bool _foundDevice = false;
 
+  String _lastDfuState = "idle";
   @override
   initState() {
     super.initState();
@@ -20,22 +22,29 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    String platformVersion;
+    String foundDeviceName;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await BleDfu.platformVersion;
+      foundDeviceName = await BleDfu.scanForDfuDevice;
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      foundDeviceName = 'Failed to find device.';
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted)
-      return;
+    if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      if (foundDeviceName != "unknown") {
+        _foundDevice = true;
+      }
+      _foundDeviceName = foundDeviceName;
+    });
+  }
+
+  startDfuPressed() {
+    BleDfu.startDfu.listen((onData) {
+      setState(() {
+        _lastDfuState = onData.toString();
+      });
     });
   }
 
@@ -47,9 +56,26 @@ class _MyAppState extends State<MyApp> {
           title: new Text('Plugin example app'),
         ),
         body: new Center(
-          child: new Text('Running on: $_platformVersion\n'),
+          child: new Column(
+            children: <Widget>[
+              new Text('Found device: $_foundDeviceName\n'),
+              getStartButton(),
+              new Text("last state: $_lastDfuState")
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  getStartButton() {
+    if (_foundDevice) {
+      return new RaisedButton(
+        child: new Text("start dfu"),
+        onPressed: startDfuPressed,
+      );
+    } else {
+      return new Container();
+    }
   }
 }

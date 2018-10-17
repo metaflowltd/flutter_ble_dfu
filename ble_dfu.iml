@@ -11,13 +11,9 @@
       <excludeFolder url="file://$MODULE_DIR$/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/build" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Pods/.symlinks/plugins/ble_dfu/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Pods/.symlinks/plugins/ble_dfu/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Pods/.symlinks/plugins/ble_dfu/build" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/Pods/.symlinks/plugins/ble_dfu/example/build/ios/Release-iphoneos/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/Pods/.symlinks/plugins/ble_dfu/example/build/ios/iphoneos/Runner.app/flutter_assets/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/Pods/.symlinks/plugins/ble_dfu/example/ios/Flutter/flutter_assets/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />

@@ -12,9 +12,9 @@ class BleDfu {
     return version;
   }
 
-  static Stream<dynamic> get startDfu {
+  static Stream<dynamic>  startDfu(String url) {
     var stream = _eventChannel.receiveBroadcastStream();
-    _channel.invokeMethod('startDfu');
+    _channel.invokeMethod('startDfu',{"url": url});
     return stream;
   }
 }

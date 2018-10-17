@@ -17,10 +17,10 @@ public class DFUStreamHandler: NSObject, FlutterStreamHandler, DFUProgressDelega
     
     var eventSink: FlutterEventSink?
     
-    func start(){
+    func start(String url){
         
         do {
-            let pathUrl = URL(string: "https://s3.amazonaws.com/metaflow-app-assets/app_dfu_package+240518.zip")!
+            let pathUrl = URL(string: url)!
             let zipfileData = try Data(contentsOf: pathUrl)
             
             let selectedFirmware = DFUFirmware(zipFile: zipfileData)
@@ -89,8 +89,8 @@ public class SwiftBleDfuPlugin: NSObject, FlutterPlugin {
                 result("no device")
                 return
             }
-            
-            DFUStreamHandler.shared.start()
+            let params = call.arguments as? Dictionary<String,String>
+            DFUStreamHandler.shared.start(params!["url"])
             result("started")
         }
         

@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   startDfuPressed() {
-    BleDfu.startDfu.listen((onData) {
+    BleDfu.startDfu("").listen((onData) {
       setState(() {
         _lastDfuState = onData.toString();
       });

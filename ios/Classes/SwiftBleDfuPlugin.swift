@@ -17,7 +17,7 @@ public class DFUStreamHandler: NSObject, FlutterStreamHandler, DFUProgressDelega
     
     var eventSink: FlutterEventSink?
     
-    func start(String url){
+    func start(url: String){
         
         do {
             let pathUrl = URL(string: url)!

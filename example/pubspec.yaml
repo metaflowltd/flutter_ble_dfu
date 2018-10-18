@@ -1,6 +1,9 @@
 name: ble_dfu_example
 description: Demonstrates how to use the ble_dfu plugin.
 
+environment:
+ sdk: ">=2.0.0-dev.28.0 <3.0.0"
+
 dependencies:
   flutter:
     sdk: flutter

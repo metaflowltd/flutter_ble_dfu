@@ -90,7 +90,7 @@ public class SwiftBleDfuPlugin: NSObject, FlutterPlugin {
                 return
             }
             let params = call.arguments as? Dictionary<String,String>
-            DFUStreamHandler.shared.start(params!["url"])
+            DFUStreamHandler.shared.start(params!["url"]!)
             result("started")
         }
         

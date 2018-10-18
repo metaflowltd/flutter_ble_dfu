@@ -219,8 +219,11 @@ extension NRFManager {
         }
         
         log("Disconnect ...")
-        if self.currentPeripheral?.peripheral.state == CBPeripheralState.disconnecting && self.currentPeripheral?.peripheral.state == CBPeripheralState.connecting {
-            return
+        if #available(iOS 9.0, *) {
+           if self.currentPeripheral?.peripheral.state == CBPeripheralState.disconnecting && self.currentPeripheral?.peripheral.state == CBPeripheralState.connecting {
+               return
+           }
+        }else{
         }
         self.currentPeripheral!.prepareForDisconnect()
         
@@ -260,7 +263,8 @@ extension NRFManager {
     var btStatePoweredOn:Bool {
         return self.btState == .poweredOn
     }
-    
+
+    @available(iOS 10.0, *)
     var btState:CBManagerState {
         return self.bluetoothManager!.state
     }

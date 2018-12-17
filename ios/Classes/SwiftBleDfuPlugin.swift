@@ -78,9 +78,11 @@ public class SwiftBleDfuPlugin: NSObject, FlutterPlugin {
                 
                 result("found \(peri.peripherial.name!)")
             }
-            NRFManager.sharedInstance.disconnect()
-            NRFManager.sharedInstance.scanAndChooseFirst = false
-            NRFManager.sharedInstance.connect()
+            NRFManager.sharedInstance.disconnectWithEnd {
+                NRFManager.sharedInstance.scanAndChooseFirst = false
+                NRFManager.sharedInstance.connect()
+            }
+            
             
         }
         

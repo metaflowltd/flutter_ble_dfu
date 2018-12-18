@@ -8,13 +8,16 @@ class BleDfu {
   static const EventChannel _eventChannel = const EventChannel('ble_dfu_event');
 
   static Future<String> get scanForDfuDevice async {
-    final String version = await _channel.invokeMethod('scanForDfuDevice');
-    return version;
+    return await _channel.invokeMethod('scanForDfuDevice');
   }
 
-  static Stream<dynamic>  startDfu(String url) {
-    var stream = _eventChannel.receiveBroadcastStream();
-    _channel.invokeMethod('startDfu',{"url": url});
+  static Stream<dynamic> startDfu(String url, String deviceAddress, String deviceName) {
+    final stream = _eventChannel.receiveBroadcastStream();
+    _channel.invokeMethod('startDfu', {
+      "deviceAddress": deviceAddress,
+      "deviceName": deviceName,
+      "url": url
+    });
     return stream;
   }
 }

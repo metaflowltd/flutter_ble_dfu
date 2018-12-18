@@ -1,81 +1,99 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ble_dfu/ble_dfu.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  String _foundDeviceName = 'Unknown';
-  bool _foundDevice = false;
 
-  String _lastDfuState = "idle";
+  String _deviceName;
+  String _deviceAddress = "F6:61:0A:D6:98:5A";
+  String _lastDfuState;
+
   @override
   initState() {
     super.initState();
+
     initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    String foundDeviceName;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      foundDeviceName = await BleDfu.scanForDfuDevice;
-    } on PlatformException {
-      foundDeviceName = 'Failed to find device.';
+    if (!Platform.isIOS) {
+      _deviceName = "LUMEN_DFU";
+      return;
     }
 
-    if (!mounted) return;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      _deviceName = await BleDfu.scanForDfuDevice;
+    } on PlatformException {
+      _deviceName = null;
+    }
 
-    setState(() {
-      if (foundDeviceName != "unknown") {
-        _foundDevice = true;
-      }
-      _foundDeviceName = foundDeviceName;
-    });
-  }
-
-  startDfuPressed() {
-    BleDfu.startDfu("").listen((onData) {
-      setState(() {
-        _lastDfuState = onData.toString();
-      });
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Plugin example app'),
+
+    final children = <Widget>[
+      Text('Found device: ${_deviceName ?? "Not found"}'),
+    ];
+
+    if (Platform.isAndroid) {
+      children.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text('Device address: $_deviceAddress'),
+          )
+      );
+    }
+
+    children.add(
+      Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text("Last state: ${_lastDfuState ?? ""}"),
+      )
+    );
+
+    children.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: FlatButton(
+            child: Text("START DFU"),
+            onPressed: _deviceName != null ? _onStartDfuPressed : null),
+        )
+    );
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('DFU Plugin example'),
         ),
-        body: new Center(
-          child: new Column(
-            children: <Widget>[
-              new Text('Found device: $_foundDeviceName\n'),
-              getStartButton(),
-              new Text("last state: $_lastDfuState")
-            ],
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: children,
           ),
         ),
       ),
     );
   }
 
-  getStartButton() {
-    if (_foundDevice) {
-      return new RaisedButton(
-        child: new Text("start dfu"),
-        onPressed: startDfuPressed,
-      );
-    } else {
-      return new Container();
-    }
+  _onStartDfuPressed() {
+    BleDfu.startDfu("https://src.metaflow.co/firmware/lumen_v2_20181216.zip", _deviceAddress, _deviceName).listen((onData) {
+      setState(() {
+        _lastDfuState = onData.toString();
+      });
+    });
   }
 }

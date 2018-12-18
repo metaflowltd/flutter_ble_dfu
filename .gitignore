@@ -6,3 +6,8 @@
 pubspec.lock
 
 build/
+.idea/.name
+.idea/caches/
+gradle/
+gradlew
+gradlew.bat

@@ -6,24 +6,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e6650580-01e2-470f-a676-5ea4fe308a08" name="Default" comment="added android dfu support">
-      <change afterPath="$PROJECT_DIR$/example/android/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/.idea/runConfigurations.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/android/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/metaflow/bledfu/BleDfuPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/metaflow/bledfu/BleDfuPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/generated/i18n.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated/i18n.dart" afterDir="false" />
+    <list default="true" id="e6650580-01e2-470f-a676-5ea4fe308a08" name="Default" comment="android x">
+      <change beforePath="$PROJECT_DIR$/example/android/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/gradlew.bat" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -41,6 +25,7 @@
     <session id="1254013017">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -48,11 +33,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="7" />
+          <entry key="txt" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="7" />
+          <entry key="PLAIN_TEXT" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -85,11 +72,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/metaflow/bledfu/BleDfuPlugin.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="384">
+              <caret line="115" column="40" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -131,7 +118,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
@@ -168,6 +155,8 @@
       <find>eventSink</find>
       <find>dfuController</find>
       <find>1.2.71</find>
+      <find>unregisterProgressListener</find>
+      <find>DfuServiceListenerHelper</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/android</dir>
@@ -207,10 +196,10 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="2560" />
-    <option name="height" value="1057" />
+    <option name="width" value="1440" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -432,7 +421,14 @@
       <option name="project" value="LOCAL" />
       <updated>1545139949290</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="android x">
+      <created>1553162897337</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1553162897338</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -442,7 +438,7 @@
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24964234" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Build Variants" order="3" side_tool="true" />
@@ -453,7 +449,7 @@
       <window_info anchor="bottom" id="Statistic" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3299363" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3299363" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -505,7 +501,8 @@
     <MESSAGE value="fix url param" />
     <MESSAGE value="fix example" />
     <MESSAGE value="added android dfu support" />
-    <option name="LAST_COMMIT_MESSAGE" value="added android dfu support" />
+    <MESSAGE value="android x" />
+    <option name="LAST_COMMIT_MESSAGE" value="android x" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ios/ble_dfu.podspec">
@@ -598,13 +595,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/metaflow/bledfu/BleDfuPlugin.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/example/android/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="134">
@@ -638,6 +628,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/com/metaflow/bledfu/BleDfuPlugin.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="115" column="40" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="40" />
         </state>
       </provider>
     </entry>

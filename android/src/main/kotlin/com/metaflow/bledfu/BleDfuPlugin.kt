@@ -36,23 +36,26 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
 
     private var eventSink: EventSink? = null
 
-    private val dfuProgressListener = object: DfuProgressListenerAdapter() {
-        override fun onDfuAborted(deviceAddress: String?) {
+    private val dfuProgressListener = object : DfuProgressListenerAdapter() {
+        override fun onDfuAborted(deviceAddress: String) {
             super.onDfuAborted(deviceAddress)
             eventSink?.error("DA", "Dfu aborted", "Dfu aborted")
+            unregisterProgressListener()
         }
 
-        override fun onError(deviceAddress: String?, error: Int, errorType: Int, message: String?) {
+        override fun onError(deviceAddress: String, error: Int, errorType: Int, message: String?) {
             super.onError(deviceAddress, error, errorType, message)
             eventSink?.error("DE", "Error $error", message)
+            unregisterProgressListener()
         }
 
-        override fun onDeviceDisconnected(deviceAddress: String?) {
+        override fun onDeviceDisconnected(deviceAddress: String) {
             super.onDeviceDisconnected(deviceAddress)
             eventSink?.error("DD", "Device disconnected", "Device disconnected")
+            unregisterProgressListener()
         }
 
-        override fun onProgressChanged(deviceAddress: String?, percent: Int, speed: Float, avgSpeed: Float, currentPart: Int, partsTotal: Int) {
+        override fun onProgressChanged(deviceAddress: String, percent: Int, speed: Float, avgSpeed: Float, currentPart: Int, partsTotal: Int) {
             super.onProgressChanged(deviceAddress, percent, speed, avgSpeed, currentPart, partsTotal)
 
             Log.d("BleDfuPlugin", "progress changed $percent")
@@ -98,15 +101,14 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
 
             if (uri == null) {
                 result.error("DF", "Download failed", "Download failed")
-            }
-            else {
+            } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     DfuServiceInitiator.createDfuNotificationChannel(registrar.activity())
                 }
 
                 val starter = DfuServiceInitiator(deviceAddress)
-                    .setDeviceName(deviceName)
-                    .setKeepBond(false)
+                        .setDeviceName(deviceName)
+                        .setKeepBond(false)
 
                 // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
                 starter.setZip(uri, null)
@@ -122,7 +124,11 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
         }.start()
     }
 
-    private fun downloadFile(urlString: String, fileName: String) : Uri? {
+    fun unregisterProgressListener() {
+        DfuServiceListenerHelper.unregisterProgressListener(registrar.activity(), dfuProgressListener)
+    }
+
+    private fun downloadFile(urlString: String, fileName: String): Uri? {
 
         Log.d("BleDfuPlugin", "downloadFile $urlString $fileName")
 

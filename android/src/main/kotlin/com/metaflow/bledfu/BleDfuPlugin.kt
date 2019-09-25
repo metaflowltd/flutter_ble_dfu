@@ -100,7 +100,7 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
             val uri = downloadFile(urlString, "dfu.zip")
 
             if (uri == null) {
-                activity.runOnUiThread {
+                registrar.activity.runOnUiThread {
                     result.error("DF", "Download failed", "Download failed")
                 }
             } else {
@@ -120,7 +120,7 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
                 // You may use the controller to pause, resume or abort the DFU process.
                 val controller = starter.start(registrar.activity(), DfuService::class.java)
 
-                activity.runOnUiThread {
+                registrar.activity.runOnUiThread {
                     result.success("success")
                 }
             }

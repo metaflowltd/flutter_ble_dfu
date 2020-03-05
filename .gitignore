@@ -6,8 +6,9 @@
 pubspec.lock
 
 build/
-.idea/.name
-.idea/caches/
+.idea/
 gradle/
 gradlew
 gradlew.bat
+.flutter-plugins-dependencies
+flutter_export_environment.sh

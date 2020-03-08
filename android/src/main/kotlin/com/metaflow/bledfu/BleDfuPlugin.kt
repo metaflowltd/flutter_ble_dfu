@@ -67,7 +67,7 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            "scanForDfuDevice" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
+            "scanForDfuDevice" -> result.success("Android ${Build.VERSION.RELEASE}")
 
             "startDfu" -> {
                 startDfuService(
@@ -97,32 +97,34 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
         Thread {
             Log.d("BleDfuPlugin", "startDfuService $deviceAddress $deviceName $urlString")
 
-            val uri = downloadFile(urlString, "dfu.zip")
-
-            if (uri == null) {
+            val uri = try {
+                downloadFile(urlString, "dfu.zip")
+            } catch (e: Exception) {
+                Log.e("BleDfuPlugin", "got exception", e)
                 registrar.activity().runOnUiThread {
-                    result.error("DF", "Download failed", "Download failed")
+                    result.error("DF", "Download failed", e.message)
                 }
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    DfuServiceInitiator.createDfuNotificationChannel(registrar.activity())
-                }
+                return@Thread
+            }
 
-                val starter = DfuServiceInitiator(deviceAddress)
-                        .setDeviceName(deviceName)
-                        .setKeepBond(false)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                DfuServiceInitiator.createDfuNotificationChannel(registrar.activity())
+            }
 
-                // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
-                starter.setZip(uri, null)
+            val starter = DfuServiceInitiator(deviceAddress)
+                    .setDeviceName(deviceName)
+                    .setKeepBond(false)
 
-                DfuServiceListenerHelper.registerProgressListener(registrar.activity(), dfuProgressListener)
+            // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
+            starter.setZip(uri, null)
 
-                // You may use the controller to pause, resume or abort the DFU process.
-                val controller = starter.start(registrar.activity(), DfuService::class.java)
+            DfuServiceListenerHelper.registerProgressListener(registrar.activity(), dfuProgressListener)
 
-                registrar.activity().runOnUiThread {
-                    result.success("success")
-                }
+            // You may use the controller to pause, resume or abort the DFU process.
+            starter.start(registrar.activity(), DfuService::class.java)
+
+            registrar.activity().runOnUiThread {
+                result.success("success")
             }
 
         }.start()
@@ -132,64 +134,57 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
         DfuServiceListenerHelper.unregisterProgressListener(registrar.activity(), dfuProgressListener)
     }
 
+    @Suppress("SameParameterValue")
     private fun downloadFile(urlString: String, fileName: String): Uri? {
-
         Log.d("BleDfuPlugin", "downloadFile $urlString $fileName")
 
         var count: Int
 
-        try {
-            val url = URL(urlString)
-            val connection = url.openConnection()
-            connection.connect()
+        val url = URL(urlString)
+        val connection = url.openConnection()
+        connection.connect()
 
-            // input stream to read file - with 8k buffer
-            val input = BufferedInputStream(url.openStream(), 8192)
+        // input stream to read file - with 8k buffer
+        val input = BufferedInputStream(url.openStream(), 8192)
 
-            // External directory path to save file
-            val folder = Environment.getExternalStorageDirectory().absolutePath + File.separator + "lumen_dfu"
+        // External directory path to save file
+        val folder = Environment.getExternalStorageDirectory().absolutePath + File.separator + "lumen_dfu"
 
-            // Create lumen dfu folder if it does not exist
-            val directory = File(folder)
+        // Create lumen dfu folder if it does not exist
+        val directory = File(folder)
 
-            if (!directory.exists()) {
-                directory.mkdirs()
-            }
-
-            val outputFile = File("$folder/$fileName")
-            // Output stream to write file
-            val output = FileOutputStream(outputFile)
-            val data = ByteArray(4096)
-
-            var total = 0
-            count = input.read(data)
-
-            while (count != -1) {
-                total += count;
-//                Log.d("BleDfuPlugin", "Progress: $total out of $lengthOfFile")
-
-                // writing data to file
-                output.write(data, 0, count)
-
-                count = input.read(data)
-            }
-
-            // flushing output
-            output.flush()
-
-            // closing streams
-            output.close()
-            input.close()
-
-            Log.d("BleDfuPlugin", "Successful download ${outputFile.absolutePath}")
-
-            return Uri.fromFile(outputFile)
-
-        } catch (e: Exception) {
-            Log.e("BleDfuPlugin", "got exception $e")
-            eventSink?.error("DF", "Download failed", e.message)
+        if (!directory.exists()) {
+            directory.mkdirs()
         }
 
-        return null
+        val outputFile = File("$folder/$fileName")
+        // Output stream to write file
+        val output = FileOutputStream(outputFile)
+        val data = ByteArray(4096)
+
+        var total = 0
+        count = input.read(data)
+
+        while (count != -1) {
+            total += count
+//                Log.d("BleDfuPlugin", "Progress: $total out of $lengthOfFile")
+
+            // writing data to file
+            output.write(data, 0, count)
+
+            count = input.read(data)
+        }
+
+        // flushing output
+        output.flush()
+
+        // closing streams
+        output.close()
+        input.close()
+
+        Log.d("BleDfuPlugin", "Successful download ${outputFile.absolutePath}")
+
+        return Uri.fromFile(outputFile)
+
     }
 }

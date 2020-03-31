@@ -2,11 +2,7 @@ import Flutter
 import UIKit
 import iOSDFULibrary
 
-public class DFUStreamHandler: NSObject, FlutterStreamHandler, DFUProgressDelegate {
-    
-    public func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
-        self.eventSink!("part: \(part), outOf: \(totalParts), to: \(progress), speed: \(currentSpeedBytesPerSecond)")
-    }
+public class DFUStreamHandler: NSObject {
     
     
     static var shared = DFUStreamHandler()
@@ -17,17 +13,18 @@ public class DFUStreamHandler: NSObject, FlutterStreamHandler, DFUProgressDelega
     
     var eventSink: FlutterEventSink?
     
-    func start(_ url: String){
+    func start(_ url: String, identifier: UUID){
         
         do {
             let pathUrl = URL(string: url)!
             let zipfileData = try Data(contentsOf: pathUrl)
             
             let selectedFirmware = DFUFirmware(zipFile: zipfileData)
-            let initiator = DFUServiceInitiator(centralManager: NRFManager.sharedInstance.bluetoothManager!, target: self.foundDevice!.peripherial)
+            let initiator = DFUServiceInitiator()
             initiator.progressDelegate = self
+            initiator.delegate = self
             initiator.enableUnsafeExperimentalButtonlessServiceInSecureDfu = true
-            self.dfuController = initiator.with(firmware: selectedFirmware!).start()
+            self.dfuController = initiator.with(firmware: selectedFirmware!).start(targetWithIdentifier: identifier)
             
         } catch {
             print(error.localizedDescription)
@@ -35,6 +32,9 @@ public class DFUStreamHandler: NSObject, FlutterStreamHandler, DFUProgressDelega
 
     }
     
+}
+
+extension DFUStreamHandler: FlutterStreamHandler {
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         self.eventSink = events
         return nil
@@ -44,11 +44,27 @@ public class DFUStreamHandler: NSObject, FlutterStreamHandler, DFUProgressDelega
         self.eventSink = nil
         return nil
     }
-    
-    @objc func afterAwhile(){
-        self.eventSink!("half way there")
+}
+
+extension DFUStreamHandler: DFUProgressDelegate {
+    public func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
+        self.eventSink!("part: \(part), outOf: \(totalParts), to: \(progress), speed: \(currentSpeedBytesPerSecond)")
+    }
+}
+
+extension DFUStreamHandler: DFUServiceDelegate {
+    public func dfuStateDidChange(to state: DFUState) {
+        switch state {
+        case .aborted:
+            eventSink?(FlutterError(code: "\(state.rawValue)", message: "DFU Aborted", details: nil))
+        default:
+            print("dfuStateDidChange to: \(state.description())")
+        }
     }
     
+    public func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
+        eventSink?(FlutterError(code: "\(error.rawValue)", message: message, details: nil))
+    }
 }
 
 public class SwiftBleDfuPlugin: NSObject, FlutterPlugin {
@@ -87,12 +103,8 @@ public class SwiftBleDfuPlugin: NSObject, FlutterPlugin {
         }
         
         if call.method == "startDfu" {
-            if DFUStreamHandler.shared.foundDevice == nil {
-                result("no device")
-                return
-            }
             let params = call.arguments as? Dictionary<String,String>
-            DFUStreamHandler.shared.start(params!["url"]!)
+            DFUStreamHandler.shared.start(params!["url"]!, identifier: UUID(uuidString: params!["deviceAddress"]!)!)
             result("started")
         }
         

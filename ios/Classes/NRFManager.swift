@@ -64,7 +64,7 @@ public func == (lhs: PeripherialWithRSSI, rhs: PeripherialWithRSSI) -> Bool {
     return lhs.rssi == rhs.rssi
 }
 
-open class NRFManager:NSObject, CBCentralManagerDelegate, UARTPeripheralDelegate {
+open class NRFManager:NSObject {
     
 
     //Private Properties
@@ -257,7 +257,7 @@ extension NRFManager {
 }
 
 // MARK: - CBCentralManagerDelegate Methods
-extension NRFManager {
+extension NRFManager: CBCentralManagerDelegate {
     
     @available(iOS 10.0, *)
     var btStatePoweredOn:Bool {
@@ -340,7 +340,7 @@ extension NRFManager {
 }
 
 // MARK: - UARTPeripheralDelegate Methods
-extension NRFManager {
+extension NRFManager: UARTPeripheralDelegate {
     
     func printIfHas(_ pre:String, str: NSString?){
         if (str != nil){

@@ -2,7 +2,6 @@ package com.metaflow.bledfu
 
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.util.Log
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
@@ -150,16 +149,14 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
         val input = BufferedInputStream(url.openStream(), 8192)
 
         // External directory path to save file
-        val folder = Environment.getExternalStorageDirectory().absolutePath + File.separator + "lumen_dfu"
+        val directory = File(registrar.activity().cacheDir, "lumen_dfu")
 
         // Create lumen dfu folder if it does not exist
-        val directory = File(folder)
-
         if (!directory.exists()) {
             directory.mkdirs()
         }
 
-        val outputFile = File("$folder/$fileName")
+        val outputFile = File(directory, fileName)
         // Output stream to write file
         val output = FileOutputStream(outputFile)
         val data = ByteArray(4096)

@@ -52,7 +52,6 @@ class BleDfuPlugin(private val registrar: Registrar) : MethodCallHandler, Stream
 
         override fun onDeviceDisconnected(deviceAddress: String) {
             super.onDeviceDisconnected(deviceAddress)
-            eventSink?.error("DD", "Device disconnected", "Device disconnected")
             unregisterProgressListener()
         }
 
